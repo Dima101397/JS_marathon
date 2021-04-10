@@ -1,4 +1,9 @@
+const $arena = document.querySelector('.arenas.arena1');
+const $button = document.querySelector('.button')
+
+
 const player1 = {
+    player: 1,
     name: "Kitana",
     hp: 100,
     img: "image",
@@ -11,6 +16,7 @@ const player1 = {
 
 
 const player2 = {
+    player: 2,
     name: "Scorpion",
     hp: 100,
     img: "image",
@@ -22,32 +28,75 @@ const player2 = {
 
 }
 
-function createPlayer(className, player) {
-    const $arena = document.querySelector('.arenas.arena1');
-    for (let i = 0; i < 1; i++) {
-        const $player = document.createElement('div');
-        $player.classList.add(className)
-        const $progressbar = document.createElement('div');
-        $progressbar.classList.add('progressbar');
-        const $life = document.createElement('div');
-        $life.classList.add('life');
-        $life.style.width = player.hp + '%'
-        const $name = document.createElement('div');
-        $name.classList.add('name')
-        $name.innerText = player.name
-        $progressbar.appendChild($life)
-        $progressbar.appendChild($name)
-        const $character = document.createElement('div');
-        $character.classList.add('character');
-        const $img = document.createElement('img');
-        $img.src = player.img
-        $character.appendChild($img);
-        $player.appendChild($progressbar);
-        $player.appendChild($character);
-        $arena.appendChild($player)
+function createElement(tag, className) {
+    const $tag = document.createElement(tag);
+    if (className) {
+        $tag.classList.add(className);
     }
-
+    return $tag;
 }
 
-createPlayer('player1', player1);
-createPlayer('player2', player2);
+function createPlayer( player) {
+    const $player = createElement('div', 'player'+player.player);
+
+    const $progressbar = createElement('div', 'progressbar');
+
+    const $life = createElement('div', 'life');
+    $life.style.width = player.hp + '%'
+
+    const $name = createElement('div', 'name');
+    $name.innerText = player.name
+
+    $progressbar.appendChild($life)
+    $progressbar.appendChild($name)
+
+    const $character = createElement('div', 'character');
+
+    const $img = createElement('img');
+    $img.src = player.img
+
+    $character.appendChild($img);
+    $player.appendChild($progressbar);
+    $player.appendChild($character);
+
+    return $player;
+}
+
+
+$arena.appendChild(createPlayer( player1));
+$arena.appendChild(createPlayer( player2));
+
+
+function changeHP(player){
+    const $playerLife = document.querySelector('.player'+player.player+' .life')
+    player.hp -=Math.ceil(Math.random()*20);
+
+    $playerLife.style.width = player.hp+'%';
+
+    if (player.hp <= 0){
+        $playerLife.style.width = '0%';
+        player.hp=0;
+        // $arena.appendChild(playerLose(player.name))
+
+    }
+}
+
+$button.addEventListener('click', function(){
+    changeHP(player1);
+    changeHP(player2);
+    if (player1.hp > 0 && player2.hp==0){
+        $arena.appendChild(playerWins(player1.name))
+
+    }
+    if (player2.hp > 0 && player1.hp==0){
+        $arena.appendChild( playerWins(player2.name))
+
+    }
+})
+
+function playerWins(name){
+    const $loseTitle = createElement ('div', 'loseTitle')
+    $loseTitle.innerText =  name+' WINS';
+    $button.disabled = true;
+    return $loseTitle;
+}
