@@ -87,7 +87,7 @@ const player2 = {
     renderHP
 }
 
-function createElement(tag, className) {
+const createElement = (tag, className)=>{
     const $tag = document.createElement(tag);
     if (className) {
         $tag.classList.add(className);
@@ -95,7 +95,7 @@ function createElement(tag, className) {
     return $tag;
 }
 
-function createPlayer(player) {
+const createPlayer = (player)=>{
     const $player = createElement('div', 'player' + player.player);
 
     const $progressbar = createElement('div', 'progressbar');
