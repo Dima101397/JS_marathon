@@ -1,3 +1,6 @@
+// export { player1, player2, changeHP, elHP, renderHP } from './heroes.js'
+// export {enemyAttack, playerAttack} from './attack.js'
+
 const $arena = document.querySelector('.arenas.arena1');
 const $button = document.querySelector('.button')
 const $form = document.querySelector('.control');
@@ -84,7 +87,7 @@ const player2 = {
     renderHP
 }
 
-function createElement(tag, className) {
+const createElement = (tag, className)=>{
     const $tag = document.createElement(tag);
     if (className) {
         $tag.classList.add(className);
@@ -92,7 +95,7 @@ function createElement(tag, className) {
     return $tag;
 }
 
-function createPlayer(player) {
+const createPlayer = (player)=>{
     const $player = createElement('div', 'player' + player.player);
 
     const $progressbar = createElement('div', 'progressbar');
@@ -177,7 +180,7 @@ function playerWins(name) {
     $loseTitle.innerText = name + ' WINS';
     $button.disabled = true;
     $arena.appendChild(createReloadeButton())
-    generateLogs('end', player1,player2)
+    generateLogs('end', player1, player2)
     return $loseTitle;
 }
 
@@ -236,32 +239,34 @@ $form.addEventListener('submit', function (e) {
 })
 
 function checkAttackDef(enemy, attack) {
-
     if (enemy.def !== attack.hit) {
         player2.changeHP(attack.value)
         player2.renderHP(elHP())
         generateLogs('hit', player2, player1, attack.value)
-    }else{
+    } else {
         generateLogs('defence', player2, player1)
     }
     if (attack.def !== enemy.attack) {
         player1.changeHP(enemy.value)
         player1.renderHP(elHP())
         generateLogs('hit', player1, player2, enemy.value)
-    }else{
+    } else {
         generateLogs('defence', player1, player2)
     }
-    
+
 
     if (player1.hp > 0 && player2.hp == 0) {
         $arena.appendChild(playerWins(player1.name))
-
+        generateLogs('win', player1, player2)
     }
     else if (player2.hp > 0 && player1.hp == 0) {
         $arena.appendChild(playerWins(player2.name))
+        generateLogs('win', player2, player1)
     }
 
 }
+
+const createRandom = (number) =>  Math.floor(Math.random() * number);
 
 function generateLogs(type, player1, player2, value) {
     // const text = logs[type][0].replace('[playerKick]', player1.name).replace('[playerDefence]', player2.name);
@@ -277,21 +282,22 @@ function generateLogs(type, player1, player2, value) {
             $chat.insertAdjacentHTML('afterbegin', el)
             break;
         case 'hit':
-            const text = logs[type][getRandom(17)].replace('[playerKick]', player1.name).replace('[playerDefence]', player2.name);
+            const text = logs[type][createRandom(logs[type].lenght)].replace('[playerKick]', player1.name).replace('[playerDefence]', player2.name);
             const hit_el = `<p>${time} - ${text}. HP -${value}, ${player1.hp}/100</p>`
             $chat.insertAdjacentHTML('afterbegin', hit_el)
             break;
         case 'defence':
-            const text_def = logs[type][getRandom(7)].replace('[playerKick]', player1.name).replace('[playerDefence]', player2.name);
-            const def_el =`<p>${time} - ${text_def}</p>`
+            const text_def = logs[type][createRandom(logs[type].lenght)].replace('[playerKick]', player1.name).replace('[playerDefence]', player2.name);
+            const def_el = `<p>${time} - ${text_def}</p>`
             $chat.insertAdjacentHTML('afterbegin', def_el)
             break;
         case 'end':
-            const text_end = logs[type][getRandom(2)].replace('[playerLose]', player1.name).replace('[playerWins]', player2.name);
-            const end_el =`<p>${time} - ${text_end}</p>`
+            const text_end = logs[type][createRandom(logs[type].lenght)].replace('[playerLose]', player1.name).replace('[playerWins]', player2.name);
+            const end_el = `<p>${time} - ${text_end}</p>`
             $chat.insertAdjacentHTML('afterbegin', end_el)
             break;
     }
 }
 
 generateLogs('start', player1, player2);
+
