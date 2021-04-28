@@ -2,13 +2,12 @@ import { player1, player2, changeHP, elHP, renderHP } from './heroes.js'
 import { enemyAttack, playerAttack } from './attack.js'
 import Game from './game.js'
 import {logs} from './const.js'
+import {createElement} from './utils.js'
 
 const $arena = document.querySelector('.arenas.arena1');
 const $button = document.querySelector('.button')
 const $form = document.querySelector('.control');
 const $chat = document.querySelector('.chat')
-
-
 
 const game = new Game()
 
@@ -29,7 +28,7 @@ function createReloadeButton() {
     let $button = createElement('button', 'button')
     $button.innerText = "Restart"
     $button.addEventListener('click', function () {
-        window.location.reload()
+        window.location.pathname='index.html'
     })
     $divForButton.appendChild($button)
     return $divForButton
@@ -61,6 +60,7 @@ function checkAttackDef(enemy, attack) {
     } else {
         generateLogs('defence', player1, player2)
     }
+    game.getAttack(attack.hit, attack.def)
 
 
     if (player1.hp > 0 && player2.hp == 0) {
