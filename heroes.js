@@ -1,21 +1,25 @@
 import Player from "./player/index.js";
+import Game from "./game.js"
+import {createRandom} from "./utils.js"
+
+const game = new Game();
+// const players = await game.getPlayers();
+// console.log(players);
+const p1 = JSON.parse(localStorage.getItem('player1'));
+
+const p2 = await game.getOnePlayer().then();
 
 
-export const player1 = new Player({
+export let player1 = new Player({
+    ...p1,
     player: 1,
-    name: "Kitana",
-    hp: 100,
-    img: "http://reactmarathon-api.herokuapp.com/assets/kitana.gif",
     root: 'arenas'
 })
 
-export const player2 = new Player({
+export let player2 = new Player({
+    ...p2,
     player: 2,
-    name: "Scorpion",
-    hp: 100,
-    img: "http://reactmarathon-api.herokuapp.com/assets/scorpion.gif",
     root: 'arenas'
-
 })
 
 export function changeHP(minus) {

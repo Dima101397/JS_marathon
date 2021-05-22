@@ -36,3 +36,8 @@ export const generateLogs = (type, player1, player2, value) => {
             break;
     }
 }
+
+export const createRandom = (number) => {
+
+    return Math.floor(Math.random() * number);
+}
